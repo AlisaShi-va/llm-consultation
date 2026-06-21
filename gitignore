@@ -1,0 +1,20 @@
+# Секретные файлы конфигурации 
+.env
+*.env
+
+# Локальные базы данных 
+*.db
+*.sqlite3
+
+# Кэш Python и виртуальные окружения
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Системные папки Docker
+.docker/

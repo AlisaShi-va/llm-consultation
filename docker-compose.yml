@@ -1,0 +1,69 @@
+services:
+    auth_service:
+        build: 
+            context: ./auth_service
+            dockerfile: Dockerfile
+        container_name: auth_service_web
+        command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+        volumes:
+            - ./auth_service:/code
+        ports:
+            - "8000:8000"
+        env_file: ./auth_service/.env
+        depends_on:
+            - redis
+
+    bot_service:
+        build: 
+            context: ./bot_service
+            dockerfile: Dockerfile
+        container_name: bot_service_web
+        command: uvicorn app.main:app --host 0.0.0.0 --port 8001
+        volumes:
+            - ./bot_service:/code
+        ports:
+            - "8001:8001"
+        env_file:
+            - ./bot_service/.env
+        networks:
+            - app-network
+        depends_on:
+            - redis
+            - rabbitmq
+
+    redis:
+        image: redis:7-alpine
+        container_name: auth_bot_redis
+        ports:
+            - "6379:6379"
+        networks:
+            - app-network
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: auth_bot_rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - app-network
+
+    celery_worker:
+        build: 
+            context: ./bot_service
+            dockerfile: Dockerfile
+        container_name: bot_service_worker
+        command: celery -A app.infra.celery_app worker --loglevel=info
+        volumes:
+            - ./bot_service:/code
+        env_file:
+            - ./bot_service/.env
+        networks:
+            - app-network
+        depends_on:
+            - redis
+            - rabbitmq
+
+networks:
+    app-network:
+        driver: bridge
