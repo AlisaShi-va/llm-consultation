@@ -1,5 +1,5 @@
 # Настройки Bot Service
-from pydantic_settings import BaseSettings, SettingConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     APP_NAME: str= "bot-service"
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
     OPENROUTER_MODEL: str = "stepfun/step-3.5-flash:free"
 
-    model_config = SettingConfigDict(
+    model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore"

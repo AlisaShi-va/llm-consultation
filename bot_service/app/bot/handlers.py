@@ -12,6 +12,7 @@ router = Router()
 @router.message(Command("start"))
 async def cmd_start(message: types.Message):
     """Приветственное сообщение с инструкцией"""
+    print(f"Получена команда /start от {message.from_user.id}!")
     await message.answer(
         "👋 Привет! Я нейросетевой ассистент.\n\n"
         "Чтобы начать общение, вам нужно авторизоваться в **Auth Service**.\n"

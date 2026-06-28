@@ -47,5 +47,5 @@ class OpenRouterClient:
 
             except httpx.RequestError as exc:
                 raise OpenRouterClientError(f"Ошибка сети при запросе к OpenRouter: {exc}")
-            except (KeyError, IndexType) as exc:
+            except (KeyError, IndexError) as exc:
                 raise OpenRouterClientError(f"Некорректный формат ответа от OpenRouter: {exc}")

@@ -1,5 +1,4 @@
 # Бизнес-логика Auth Service
-from datetime import timedelta
 from app.core.exceptions import (
     InvalidCredentialsError,
     UserAlreadyExistsError,
@@ -20,7 +19,7 @@ class AuthUseCase:
         """Регистрация нового пользователя"""
         existing_user = await self.user_repo.get_by_email(dto.email)
         if existing_user:
-            raise UserAlreadyExcistsError()
+            raise UserAlreadyExistsError()
         
         hashed_password = hash_password(dto.password)
         new_user = User(
@@ -29,7 +28,7 @@ class AuthUseCase:
             role="user"
         )
         created_user = await self.user_repo.create(new_user)
-        return UserPublic.from_attributes(created_user)
+        return UserPublic.model_validate(created_user)
     
     async def login(self, email: str, password: str) -> TokenResponse:
         """Аутентификация пользователя, выпуск JWT"""
@@ -41,11 +40,11 @@ class AuthUseCase:
             subject=user.id,
             role=user.role
         )
-        return TokenResponse(acess_token=token)
+        return TokenResponse(access_token=token)
     
     async def me(self, user_id: int) -> UserPublic:
         """Получение профиля текущего пользователя"""
         user = await self.user_repo.get_by_id(user_id)
         if not user:
             raise UserNotFoundError()
-        return UserPublic.from_attributes(user)
+        return UserPublic.model_validate(user)

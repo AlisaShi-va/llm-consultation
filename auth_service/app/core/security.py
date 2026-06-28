@@ -1,6 +1,6 @@
 # Реализация функции безопасности
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 

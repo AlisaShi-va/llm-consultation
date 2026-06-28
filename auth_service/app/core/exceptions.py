@@ -19,15 +19,15 @@ class BaseHTTPException(HTTPException):
         )
 
 class UserAlreadyExistsError(BaseHTTPException):
-    STATUS_CODE = status.HTTP_409_CONFLICT,
+    STATUS_CODE = status.HTTP_409_CONFLICT
     DETAIL = "Пользователь с таким email уже существует"
 
 class InvalidCredentialsError(BaseHTTPException):
-    STATUS_CODE = status.HTTP_401_UNAUTHORIZED,
+    STATUS_CODE = status.HTTP_401_UNAUTHORIZED
     DETAIL = "Некорректный логин или пароль"
 
 class InvalidTokenError(BaseHTTPException):
-    STATUS_CODE = status.HTTP_401_UNAUTHORIZED,
+    STATUS_CODE = status.HTTP_401_UNAUTHORIZED
     DETAIL = "Недействительный токен"
 
     def __init__(self, detail: Optional[str] = None):

@@ -11,11 +11,16 @@ from app.api.router import api_router
 # Управление жизненным циклом
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        # Создание таблиц в файле auth.db
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            # Создание таблиц в файле auth.db
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        print(f"Ошибка при создании таблиц")
+        raise e
 
     yield
+    await engine.dispose()
 
 
 app = FastAPI(
